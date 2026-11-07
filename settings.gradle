@@ -1,0 +1,2 @@
+// NOVA: Cấu hình module, plugin, kho thư viện hoặc quy tắc build Gradle cho NOVA_GK.
+rootProject.name = 'NOVA'

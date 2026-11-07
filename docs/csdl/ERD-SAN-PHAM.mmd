@@ -1,0 +1,163 @@
+erDiagram
+    direction LR
+    brands["brands"] {
+        bigint id PK "NOT NULL"
+        string code UK "NOT NULL"
+        string name "NOT NULL"
+        string logo_url "NULL"
+        bool is_active "NOT NULL"
+    }
+    categories["categories"] {
+        bigint id PK "NOT NULL"
+        string code UK "NOT NULL"
+        string name "NOT NULL"
+        bigint parent_id FK "NULL"
+        integer sort_order "NOT NULL"
+        bool is_active "NOT NULL"
+        string image_url "NULL"
+    }
+    dataSources["data_sources"] {
+        bigint id PK "NOT NULL"
+        string code UK "NOT NULL"
+        string name "NOT NULL"
+        string base_url "NULL"
+        string notes "NULL"
+    }
+    favorites["favorites"] {
+        bigint user_id PK, FK "NOT NULL"
+        bigint product_id PK, FK "NOT NULL"
+        datetime created_at "NOT NULL"
+    }
+    homeBanners["home_banners"] {
+        bigint id PK "NOT NULL"
+        string title "NOT NULL"
+        string image_url "NOT NULL"
+        bigint product_id FK "NULL"
+        bool is_active "NOT NULL"
+        datetime created_at "NOT NULL"
+    }
+    orderItems["order_items"] {
+        bigint id PK "NOT NULL"
+        bigint order_id FK "NOT NULL"
+        bigint variant_id FK "NOT NULL"
+        bigint product_id FK "NOT NULL"
+        string sku_snapshot "NOT NULL"
+        string product_name_snapshot "NOT NULL"
+        string variant_snapshot "NOT NULL"
+        string image_url_snapshot "NULL"
+        integer quantity "NOT NULL"
+        bigint unit_price_vnd "NOT NULL"
+        bigint line_total_vnd "NULL"
+        bigint flash_slot_item_id FK "NULL"
+    }
+    priceObservations["price_observations"] {
+        bigint id PK "NOT NULL"
+        bigint variant_id FK "NOT NULL"
+        bigint source_id FK "NULL"
+        string source_url "NOT NULL"
+        bigint price_vnd "NOT NULL"
+        datetime observed_at "NOT NULL"
+        string kind "NOT NULL"
+        string note "NULL"
+    }
+    productImages["product_images"] {
+        bigint id PK "NOT NULL"
+        bigint product_id FK "NOT NULL"
+        bigint variant_id FK "NULL"
+        string url "NOT NULL"
+        string alt_text "NOT NULL"
+        integer sort_order "NOT NULL"
+        string source_url "NULL"
+    }
+    productSpecifications["product_specifications"] {
+        bigint product_id PK, FK "NOT NULL"
+        bigint specification_id PK, FK "NOT NULL"
+        string value_text "NOT NULL"
+    }
+    productVariants["product_variants"] {
+        bigint id PK "NOT NULL"
+        bigint product_id FK "NOT NULL"
+        string sku UK "NOT NULL"
+        string color "NOT NULL"
+        integer storage_gb "NULL"
+        integer ram_gb "NULL"
+        bigint price_vnd "NOT NULL"
+        bigint list_price_vnd "NULL"
+        string price_kind "NOT NULL"
+        string status "NOT NULL"
+        datetime created_at "NOT NULL"
+        datetime updated_at "NOT NULL"
+    }
+    products["products"] {
+        bigint id PK "NOT NULL"
+        string code UK "NOT NULL"
+        bigint brand_id FK "NOT NULL"
+        bigint category_id FK "NOT NULL"
+        string name "NOT NULL"
+        string slug UK "NOT NULL"
+        string summary "NULL"
+        string description "NULL"
+        string source_url "NULL"
+        datetime observed_at "NULL"
+        bool is_featured "NOT NULL"
+        string status "NOT NULL"
+        datetime created_at "NOT NULL"
+        datetime updated_at "NOT NULL"
+    }
+    reviewImages["review_images"] {
+        bigint id PK "NOT NULL"
+        bigint review_id FK "NOT NULL"
+        string url "NOT NULL"
+        integer sort_order "NOT NULL"
+    }
+    reviews["reviews"] {
+        bigint id PK "NOT NULL"
+        bigint user_id FK "NOT NULL"
+        bigint product_id FK "NOT NULL"
+        bigint order_item_id FK "NULL"
+        smallint rating "NOT NULL"
+        string title "NULL"
+        string content "NOT NULL"
+        string status "NOT NULL"
+        datetime created_at "NOT NULL"
+        datetime updated_at "NOT NULL"
+    }
+    specificationDefinitions["specification_definitions"] {
+        bigint id PK "NOT NULL"
+        string code UK "NOT NULL"
+        string name "NOT NULL"
+        string unit "NULL"
+        integer sort_order "NOT NULL"
+    }
+    users["users"] {
+        bigint id PK "NOT NULL"
+        string email "NOT NULL"
+        string password_hash "NOT NULL"
+        string full_name "NOT NULL"
+        string phone "NULL"
+        string avatar_url "NULL"
+        string gender "NULL"
+        string status "NOT NULL"
+        datetime email_verified_at "NULL"
+        datetime password_changed_at "NULL"
+        datetime created_at "NOT NULL"
+        datetime updated_at "NOT NULL"
+        date birth_date "NULL"
+    }
+    categories o|..o{ categories : "parent_id"
+    products ||--o{ favorites : "product_id"
+    users ||--o{ favorites : "user_id"
+    products o|..o{ homeBanners : "product_id"
+    dataSources o|..o{ priceObservations : "source_id"
+    productVariants ||..o{ priceObservations : "variant_id"
+    products ||..o{ productImages : "product_id"
+    productVariants o|..o{ productImages : "variant_id,product_id"
+    products ||--o{ productSpecifications : "product_id"
+    specificationDefinitions ||--o{ productSpecifications : "specification_id"
+    products ||..o{ productVariants : "product_id"
+    brands ||..o{ products : "brand_id"
+    categories ||..o{ products : "category_id"
+    reviews ||..o{ reviewImages : "review_id"
+    orderItems o|..o{ reviews : "order_item_id,product_id"
+    products ||..o{ reviews : "product_id"
+    users ||..o{ reviews : "user_id"

@@ -1,0 +1,70 @@
+erDiagram
+    direction LR
+    authSessions["auth_sessions"] {
+        bigint id PK "NOT NULL"
+        bigint user_id FK "NOT NULL"
+        string refresh_token_hash UK "NOT NULL"
+        string device_name "NULL"
+        inet ip_address "NULL"
+        datetime expires_at "NOT NULL"
+        datetime revoked_at "NULL"
+        datetime created_at "NOT NULL"
+    }
+    roles["roles"] {
+        bigint id PK "NOT NULL"
+        string code UK "NOT NULL"
+        string name "NOT NULL"
+    }
+    userAddresses["user_addresses"] {
+        bigint id PK "NOT NULL"
+        bigint user_id FK "NOT NULL"
+        string recipient_name "NOT NULL"
+        string recipient_phone "NOT NULL"
+        string address_line "NOT NULL"
+        string address_type "NOT NULL"
+        string label "NULL"
+        string ward "NULL"
+        string district "NULL"
+        string province "NOT NULL"
+        string country_code "NOT NULL"
+        bool is_default "NOT NULL"
+        datetime created_at "NOT NULL"
+        string delivery_note "NULL"
+    }
+    userRoles["user_roles"] {
+        bigint user_id PK, FK "NOT NULL"
+        bigint role_id PK, FK "NOT NULL"
+        datetime assigned_at "NOT NULL"
+    }
+    users["users"] {
+        bigint id PK "NOT NULL"
+        string email "NOT NULL"
+        string password_hash "NOT NULL"
+        string full_name "NOT NULL"
+        string phone "NULL"
+        string avatar_url "NULL"
+        string gender "NULL"
+        string status "NOT NULL"
+        datetime email_verified_at "NULL"
+        datetime password_changed_at "NULL"
+        datetime created_at "NOT NULL"
+        datetime updated_at "NOT NULL"
+        date birth_date "NULL"
+    }
+    verificationChallenges["verification_challenges"] {
+        bigint id PK "NOT NULL"
+        bigint user_id FK "NULL"
+        string destination "NOT NULL"
+        string purpose "NOT NULL"
+        string token_hash "NOT NULL"
+        smallint attempts "NOT NULL"
+        datetime expires_at "NOT NULL"
+        datetime consumed_at "NULL"
+        datetime created_at "NOT NULL"
+        string challenge_id "NULL"
+    }
+    users ||..o{ authSessions : "user_id"
+    users ||..o{ userAddresses : "user_id"
+    roles ||--o{ userRoles : "role_id"
+    users ||--o{ userRoles : "user_id"
+    users o|..o{ verificationChallenges : "user_id"

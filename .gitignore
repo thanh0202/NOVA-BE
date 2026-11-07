@@ -1,0 +1,55 @@
+# Build outputs and local caches
+.gradle/
+.kotlin/
+.idea/
+build/
+releases/
+captures/
+.externalNativeBuild/
+.cxx/
+__pycache__/
+*.py[cod]
+*.iml
+*.class
+*.log
+*.hprof
+
+# Generated application packages; keep both Gradle Wrapper bootstraps
+*.apk
+*.aab
+*.apks
+*.jar
+!gradle-wrapper.jar
+*.zip
+*.7z
+*.rar
+SHA256SUMS
+
+# Machine settings, database/Cloudinary/SMTP credentials and signing keys
+local.properties
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.jks
+*.keystore
+*.pem
+*.key
+*.p12
+*.pfx
+*.db
+*.sqlite
+*.sqlite3
+*.dump
+*.bak
+
+# OS metadata
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Python helper scripts are excluded from this FE-focused repository
+*.py
+
+# Source package contains application/reference code only
+/src/test/
